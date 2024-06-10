@@ -3,7 +3,7 @@ import zipfile
 import json
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAIEmbeddings
+#from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import ChatPromptTemplate
@@ -13,6 +13,8 @@ from streamlit_extras.let_it_rain import rain
 from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationChain
 from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+
 #from langchain_community.document_loaders import TextLoader
 from langchain_core.output_parsers import StrOutputParser
 #from langchain.memory import ConversationBufferMemory
@@ -21,7 +23,7 @@ import time
 from glob import glob
 
 # OpenAI API 키 설정
-OPENAI_API_KEY = "OPENAI_API_KEY" # 실제 API 키를 설정하세요
+OPENAI_API_KEY = "YOUR_OPENAI_API_KEY" # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
@@ -185,13 +187,3 @@ def rose():
     )
 
 rose()
-
-
-
-
-
-
-
-
-
-
