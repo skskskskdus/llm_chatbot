@@ -43,17 +43,17 @@ with col2:
     def load_lottiefile(filepath: str):
         with open(filepath, "r") as f:
             return json.load(f)
-    lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "chat.json")
-    lottie_chat = load_lottiefile(lottie_file_path)
+        lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "chat.json")
+        lottie_chat = load_lottiefile(lottie_file_path)
 
-    st_lottie(
-        lottie_chat,
-        speed=1,
-        reverse=False,
-        loop=True,
-        quality="low",
-        height=None,
-        width=None,
-        key=None,
+        st_lottie(
+            lottie_chat,
+            speed=1,
+            reverse=False,
+            loop=True,
+            quality="low",
+            height=None,
+            width=None,
+            key=None,
 )
 
