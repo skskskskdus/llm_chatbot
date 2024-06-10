@@ -39,12 +39,10 @@ import os
 import json
 import streamlit as st
 
-def load_lottiefile(filepath: str):
-    with open(filepath, "r") as f:
-        return json.load(f)
-
-
 with col2:
+    def load_lottiefile(filepath: str):
+        with open(filepath, "r") as f:
+            return json.load(f)
     lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "chat.json")
     lottie_chat = load_lottiefile(lottie_file_path)
 
@@ -57,5 +55,5 @@ with col2:
         height=None,
         width=None,
         key=None,
-    )
+)
 
