@@ -27,12 +27,16 @@ st.title("🤖서비스개발I 기말팀플🤖")
 st.sidebar.success("위 페이지를 선택하세요.")
 
 #### 로티파일 넣기
+#### 로티파일 넣기
+import os
+import json
+
 def load_lottiefile(filepath: str):
     with open(filepath, "r") as f:
         return json.load(f)
 
 # 로티 파일 경로 설정 (윈도우 스타일)
-lottie_file_path = "images\coding.json"
+lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "coding.json")
 # 로티 파일 로드
 lottie_coding = load_lottiefile(lottie_file_path)
 
