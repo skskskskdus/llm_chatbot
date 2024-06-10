@@ -39,24 +39,46 @@ import os
 import json
 import streamlit as st
 
+import os
+import json
+import streamlit as st
+from streamlit_lottie import st_lottie
+
 def load_lottiefile(filepath: str):
+    # Print the file path and working directory for debugging
+    print("Lottie file path:", filepath)
+    print("Current working directory:", os.getcwd())
+    
+    if not os.path.exists(filepath):
+        raise FileNotFoundError(f"The file at path {filepath} does not exist.")
+    
     with open(filepath, "r") as f:
         return json.load(f)
 
+# Define the path to the lottie file
 lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "chat.json")
-lottie_chat = load_lottiefile(lottie_file_path)
 
-with col2:
-    st_lottie(
-        lottie_chat,
-        speed=1,
-        reverse=False,
-        loop=True,
-        quality="low",
-        height=None,
-        width=None,
-        key=None,
-)
+# Load the lottie file
+try:
+    lottie_chat = load_lottiefile(lottie_file_path)
+except FileNotFoundError as e:
+    st.error(f"Error: {e}")
+    lottie_chat = None
+
+# Display the lottie animation if loaded successfully
+if lottie_chat:
+    with st.beta_columns(2)[1]:
+        st_lottie(
+            lottie_chat,
+            speed=1,
+            reverse=False,
+            loop=True,
+            quality="low",
+            height=None,
+            width=None,
+            key=None,
+        )
+
 
 
 
