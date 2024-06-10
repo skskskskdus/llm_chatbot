@@ -23,7 +23,7 @@ import time
 from glob import glob
 
 # OpenAI API 키 설정
-OPENAI_API_KEY = "YOUR_OPENAI_API_KEY" # 실제 API 키를 설정하세요
+OPENAI_API_KEY = "OPENAI_API_KEY" # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
