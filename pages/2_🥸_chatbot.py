@@ -19,6 +19,9 @@ from langchain_core.output_parsers import StrOutputParser
 
 import time
 from glob import glob
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # OpenAI API 키 설정
 OPENAI_API_KEY = " OPENAI_API_KEY" # 실제 API 키를 설정하세요
