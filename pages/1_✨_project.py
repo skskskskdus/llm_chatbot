@@ -1,8 +1,9 @@
 import json
-import requests
+import os
 import streamlit as st
 from streamlit_lottie import st_lottie
 
+# 페이지 설정
 st.set_page_config(
     page_title="project",
     page_icon="✨"
@@ -34,40 +35,31 @@ with col1:
     또한 이목을 집중시키기 위해 인터넷 밈을 접목시켰다.
     """)
 
-# col2에 로티 파일 넣기
-import os
-import json
-import streamlit as st
-
-import os
-import json
-import streamlit as st
-from streamlit_lottie import st_lottie
-
+# Lottie 파일을 로드하는 함수
 def load_lottiefile(filepath: str):
-    # Print the file path and working directory for debugging
-    print("Lottie file path:", filepath)
-    print("Current working directory:", os.getcwd())
+    # 디버깅을 위한 파일 경로 및 현재 작업 디렉토리 출력
+    print("Lottie 파일 경로:", filepath)
+    print("현재 작업 디렉토리:", os.getcwd())
     
     if not os.path.exists(filepath):
-        raise FileNotFoundError(f"The file at path {filepath} does not exist.")
+        raise FileNotFoundError(f"경로에 파일이 존재하지 않습니다: {filepath}")
     
     with open(filepath, "r") as f:
         return json.load(f)
 
-# Define the path to the lottie file
-lottie_file_path = os.path.join(os.path.dirname(__file__), "images", "chat.json")
+# Lottie 파일 경로 정의 (상위 디렉토리의 images 폴더에 있는 경우)
+lottie_file_path = os.path.join(os.path.dirname(__file__), "../images", "chat.json")
 
-# Load the lottie file
+# Lottie 파일 로드
 try:
     lottie_chat = load_lottiefile(lottie_file_path)
 except FileNotFoundError as e:
-    st.error(f"Error: {e}")
+    st.error(f"오류: {e}")
     lottie_chat = None
 
-# Display the lottie animation if loaded successfully
+# Lottie 애니메이션을 성공적으로 로드한 경우 표시
 if lottie_chat:
-    with st.beta_columns(2)[1]:
+    with col2:
         st_lottie(
             lottie_chat,
             speed=1,
@@ -78,7 +70,3 @@ if lottie_chat:
             width=None,
             key=None,
         )
-
-
-
-
