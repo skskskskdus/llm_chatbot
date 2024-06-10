@@ -21,7 +21,7 @@ import time
 from glob import glob
 
 # OpenAI API 키 설정
-OPENAI_API_KEY = "YOUR_OPENAI_API_KEY" # 실제 API 키를 설정하세요
+OPENAI_API_KEY = " OPENAI_API_KEY" # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
@@ -40,8 +40,8 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # ZIP 파일 해제 및 JSON 데이터 읽기
-zip_file_path = os.path.join("C:\\chat-gpt-prg\\chatbot_02", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
-extract_dir = os.path.join("C:\\chat-gpt-prg\\chatbot_02", "data")
+zip_file_path = os.path.join("TL_02. 추천직업 카테고리_01. 기술계열.zip", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
+extract_dir = os.path.join("data", "data")
 json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
 
 if "retriever" not in st.session_state:
@@ -184,6 +184,10 @@ def rose():
     )
 
 rose()
+
+
+
+
 
 
 
