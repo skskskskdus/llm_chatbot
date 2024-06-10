@@ -33,6 +33,41 @@ st.title('🐈‍⬛나만의 집사님🐈‍⬛')
 # 측면 바에 비디오 추가
 st.sidebar.video("https://youtu.be/FoO7Pmx0bE4")
 
+# 기본 모델 설정import streamlit as st
+import zipfile
+import json
+import os
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain_openai import OpenAIEmbeddings
+from langchain.chains import RetrievalQA
+from langchain_community.vectorstores import Chroma
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain.docstore.document import Document
+from streamlit_extras.let_it_rain import rain
+from langchain_core.callbacks.base import BaseCallbackHandler
+from langchain.chains import ConversationChain
+from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+
+#from langchain_community.document_loaders import TextLoader
+from langchain_core.output_parsers import StrOutputParser
+#from langchain.memory import ConversationBufferMemory
+
+import time
+from glob import glob
+
+# OpenAI API 키 설정
+OPENAI_API_KEY = "ASAP" # 실제 API 키를 설정하세요
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+
+# 페이지 설정
+st.set_page_config(page_title="chatbot", page_icon="🥸")
+st.title('🐈‍⬛나만의 집사님🐈‍⬛')
+
+# 측면 바에 비디오 추가
+st.sidebar.video("https://youtu.be/FoO7Pmx0bE4")
+
 # 기본 모델 설정
 if "model" not in st.session_state:
     st.session_state["model"] = "gpt-3.5-turbo"
@@ -40,7 +75,7 @@ if "model" not in st.session_state:
 # 채팅 기록 초기화
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
-    
+
 # ZIP 파일 해제 및 JSON 데이터 읽기
 zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
 extract_dir = os.path.join("data", "data")
@@ -187,3 +222,6 @@ def rose():
     )
 
 rose()
+
+
+
