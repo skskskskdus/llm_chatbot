@@ -84,12 +84,12 @@ if "retriever" not in st.session_state:
 
     # 텍스트 분할
     text_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=100)
-    splits = text_splitter.split_documents(documents)
+    chunks = chunk_splitter.split_documents(documents)
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings()
-    vectordb = chromadb.from_documents(documents, embedding)
+    vectordb = Chroma.from_documents(documents, embedding)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
     
