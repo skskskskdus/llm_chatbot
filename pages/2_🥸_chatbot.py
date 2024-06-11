@@ -66,7 +66,8 @@ if "retriever" not in st.session_state:
             st.error(f"{json_file}에 JSON 파일을 찾을 수 없습니다.")
         except json.JSONDecodeError:
             st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
-
+     # JSON 데이터를 Document 객체로 변환
+    documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
      # 텍스트 분할
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=200)
     splits = text_splitter.split_documents(documents)
