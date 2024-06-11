@@ -12,6 +12,7 @@ from langchain_community.document_loaders import DirectoryLoader
 from langchain.docstore.document import Document
 from streamlit_extras.let_it_rain import rain
 from langchain_core.callbacks.base import BaseCallbackHandler
+from langchain_community.document_loaders import TextLoader
 from langchain.chains import ConversationChain
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.output_parsers import StrOutputParser
