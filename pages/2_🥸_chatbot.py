@@ -15,9 +15,6 @@ from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 
-
-
-
 from langchain_core.output_parsers import StrOutputParser
 from langchain_text_splitters import CharacterTextSplitter
 
@@ -89,7 +86,7 @@ if "retriever" not in st.session_state:
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(documents=chunks, embedding=embeddings)
+    #vectordb = Chroma.from_documents(documents=chunks, embedding=embeddings)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
     
