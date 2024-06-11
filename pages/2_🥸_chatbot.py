@@ -49,7 +49,7 @@ json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술
 if "retriever" not in st.session_state:
 
     # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join(data, '*.json'))
+    json_files = glob(os.path.join('data', '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
