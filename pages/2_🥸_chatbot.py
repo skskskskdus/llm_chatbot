@@ -75,13 +75,15 @@ if "retriever" not in st.session_state:
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
     # 텍스트 분할
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_documents(documents)
+    # 텍스트는 RecursiveCharacterTextSplitter를 사용하여 분할
+    chunk_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    chunks = chunk_splitter.split_documents(documents)
     print("Chunks split Done.")
-    
-    # 임베딩 및 벡터 데이터베이스 생성, 검색
-    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
-    vectordb = chromadb.from_documents(documents=splits,embedding=embedding)
+    # embeddings은 OpenAI의 임베딩을 사용
+    # vectordb는 chromadb사용함
+
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+    vectordb = Chroma.from_documents(documents=chunks, embedding=embeddings)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
 
