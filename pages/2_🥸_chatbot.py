@@ -77,7 +77,7 @@ if "retriever" not in st.session_state:
 
    
  # 텍스트 분할
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=200)
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
