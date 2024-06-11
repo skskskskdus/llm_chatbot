@@ -133,7 +133,7 @@ with st.form('Question'):
 for chat in st.session_state.conversation:
     st.write(f"**오조사마:** {chat['question']}")
     st.info(f"**집사:** {chat['response']}")
-
+    
 # 대화 저장 버튼
 if st.button("대화 저장"):
     if not os.path.exists('conversations'):
