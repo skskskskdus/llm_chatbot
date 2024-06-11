@@ -3,28 +3,25 @@ import zipfile
 import json
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-#from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
+from langchain_community.vectorstores.chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain.docstore.document import Document
 from streamlit_extras.let_it_rain import rain
 from langchain_core.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationChain
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
-
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.output_parsers import StrOutputParser
-from langchain_text_splitters import CharacterTextSplitter
 
 import time
+import chromadb
 from glob import glob
-
 from dotenv import load_dotenv
 
 # API 키 정보 로드
 load_dotenv()
+
 # OpenAI API 키 설정
 OPENAI_API_KEY = "YOUR_API_KEY" # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
@@ -76,20 +73,19 @@ if "retriever" not in st.session_state:
         except json.JSONDecodeError:
             st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
 
-# JSON 데이터를 Document 객체로 변환
-documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
+    # JSON 데이터를 Document 객체로 변환
+    documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
+    # 텍스트 분할
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    splits = text_splitter.split_documents(documents)
+    print("Chunks split Done.")
+    
+    # 임베딩 및 벡터 데이터베이스 생성, 검색
+    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
+    vectordb = chromadb.from_documents(documents=splits,embedding=embedding)
+    print("Retriever Done.")
+    st.session_state.retriever = vectordb.as_retriever()
 
-# 텍스트 분할
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=100)
-chunks = text_splitter.split_documents(documents)
-print("Chunks split Done.")
-    
-# 임베딩 및 벡터 데이터베이스 생성, 검색
-embeddings = OpenAIEmbeddings()
-vectordb = Chroma.from_documents(documents=chunks, embedding=embeddings)
-print("Retriever Done.")
-st.session_state.retriever = vectordb.as_retriever()
-    
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
         """
@@ -103,10 +99,12 @@ prompt = ChatPromptTemplate.from_template(
     Question: {question}
     """
 )
+
 def format_docs(docs):
     return '\n\n'.join(doc.page_content for doc in docs)
 
 llm = ChatOpenAI(api_key=OPENAI_API_KEY,model_name="gpt-3.5-turbo", temperature=0)
+
 # RAG Chain 연결
 rag_chain = (
     {'context':  st.session_state.retriever | format_docs, 'question': RunnablePassthrough()}
@@ -125,7 +123,7 @@ def generate_response(input_text):
     # 이전 대화를 포함하는 BaseMessages 목록 생성
     #base_messages = create_base_messages(st.session_state.conversation)
     # RAG 체인에 전달하여 응답 생성
-    response = rag_chain.invoke(input_string)
+    response = rag_chain
     return response
 
 
