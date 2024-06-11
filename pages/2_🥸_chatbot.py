@@ -15,7 +15,6 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_core.output_parsers import StrOutputParser
 
 import time
-import chromadb
 from glob import glob
 from dotenv import load_dotenv
 
