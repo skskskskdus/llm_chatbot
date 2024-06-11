@@ -67,19 +67,17 @@ if "retriever" not in st.session_state:
         except json.JSONDecodeError:
             st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
 
-     # JSON 데이터를 Document 객체로 변환
-    documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
-
-    # 텍스트 분할
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_documents(documents)  # 수정된 부분
+     # 텍스트 분할
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=200)
+    splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-    vectordb = Chroma.from_documents(documents=splits, embedding=embeddings)
+    chroma_db = Chroma.from_documents(
+        documents=splits, embedding=embeddings)
     print("Retriever Done.")
-    st.session_state.retriever = vectordb.as_retriever()
+    st.session_state.retriever = chroma_db.as_retriever()
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
