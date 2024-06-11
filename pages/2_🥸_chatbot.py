@@ -22,7 +22,10 @@ load_dotenv()
 
 # OpenAI API 키 설정
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+if not OPENAI_API_KEY:
+    st.error("OPENAI_API_KEY is missing! Please check your environment variables.")
+else:
+    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
 st.set_page_config(page_title="chatbot", page_icon="🥸")
@@ -80,7 +83,7 @@ if "retriever" not in st.session_state:
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
-    embedding = OpenAIEmbeddings()
+    embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
     vectordb = FAISS.from_documents(documents=splits, embedding=embedding)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
