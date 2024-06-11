@@ -4,7 +4,7 @@ import json
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import RetrievalQA
-from langchain_community.vectorstores.chroma import Chroma
+from langchain_community.vectorstores import Chroma
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
