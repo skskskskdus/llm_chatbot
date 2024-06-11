@@ -14,13 +14,14 @@ from langchain.chains import ConversationChain
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
+from langchain.vectorstores import ChromaVectorStore
+
 
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_text_splitters import CharacterTextSplitter
 
 import time
-import chromadb
 from glob import glob
 
 from dotenv import load_dotenv
