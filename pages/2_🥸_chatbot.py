@@ -3,29 +3,32 @@ import zipfile
 import json
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain_community.vectorstores import Chroma
-
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from langchain_community.document_loaders import DirectoryLoader
 from langchain.docstore.document import Document
 from streamlit_extras.let_it_rain import rain
 from langchain_core.callbacks.base import BaseCallbackHandler
-from langchain_community.document_loaders import TextLoader
 from langchain.chains import ConversationChain
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+
+
 from langchain_core.output_parsers import StrOutputParser
 
 import time
+import chromadb
 from glob import glob
+
 from dotenv import load_dotenv
 
 # API 키 정보 로드
 load_dotenv()
 
 # OpenAI API 키 설정
-OPENAI_API_KEY = "YOUR_API_KEY" # 실제 API 키를 설정하세요
+OPENAI_API_KEY = "OPENAI_API_KEY" # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
@@ -44,23 +47,49 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # ZIP 파일 해제 및 JSON 데이터 읽기
-#zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
-#extract_dir = os.path.join("data", "data")
-#json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
+zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
+extract_dir = os.path.join("data", "data")
+json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
 
 if "retriever" not in st.session_state:
+    # 파일 압축 해제
+    try:
+        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_dir)
+    except PermissionError:
+        st.error("권한이 없습니다. 파일 경로와 권한을 확인하세요.")
+    except FileNotFoundError:
+        st.error("ZIP 파일을 찾을 수 없습니다. 파일 경로를 확인하세요.")
 
-    loader=DirectoryLoader("data",glob="*.json",loader_cls=TextLoader)
-    documents = loader.load()
+    # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
+    json_files = glob(os.path.join(extract_dir, '*.json'))
+
+    # 모든 JSON 데이터를 저장할 리스트
+    career_data = []
+
+    # 각 JSON 파일 로드 및 데이터 추가
+    for json_file in json_files:
+        try:
+            with open(json_file, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                career_data.extend(data)  # 데이터를 리스트에 추가
+        except FileNotFoundError:
+            st.error(f"{json_file}에 JSON 파일을 찾을 수 없습니다.")
+        except json.JSONDecodeError:
+            st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
+
+    # JSON 데이터를 Document 객체로 변환
+    documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
+    # 텍스트 분할
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    texts = text_splitter.split_documents(documents)
-    embeddings_model=OpenAIEmbeddings()
-    embedding = embeddings_model
-    vectordb = Chroma.from_documents(
-        documents=texts,
-        embedding=embedding)
+    splits = text_splitter.split_documents(documents)
+    print("Chunks split Done.")
+    
+    # 임베딩 및 벡터 데이터베이스 생성, 검색
+    embedding = OpenAIEmbeddings()
+    vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
+    print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
-
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
         """
@@ -74,12 +103,10 @@ prompt = ChatPromptTemplate.from_template(
     Question: {question}
     """
 )
-
 def format_docs(docs):
     return '\n\n'.join(doc.page_content for doc in docs)
 
 llm = ChatOpenAI(api_key=OPENAI_API_KEY,model_name="gpt-3.5-turbo", temperature=0)
-
 # RAG Chain 연결
 rag_chain = (
     {'context':  st.session_state.retriever | format_docs, 'question': RunnablePassthrough()}
@@ -98,9 +125,8 @@ def generate_response(input_text):
     # 이전 대화를 포함하는 BaseMessages 목록 생성
     #base_messages = create_base_messages(st.session_state.conversation)
     # RAG 체인에 전달하여 응답 생성
-    response = rag_chain
+    response = rag_chain.invoke(input_string)
     return response
-
 
 # 질문 양식
 with st.form('Question'):
