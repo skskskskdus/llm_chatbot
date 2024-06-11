@@ -14,7 +14,7 @@ from langchain.chains import ConversationChain
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain.vectorstores import ChromaVectorStore
+
 
 
 
