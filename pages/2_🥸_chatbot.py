@@ -109,7 +109,7 @@ rag_chain = (
     {'context': st.session_state.retriever | format_docs, 'question': RunnablePassthrough()}
     | prompt
     | llm
-    | StrOutputParser()
+    | PydanticOutputParser()
 )
 
 # 세션 상태 초기화
