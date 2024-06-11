@@ -54,7 +54,6 @@ if "retriever" not in st.session_state:
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     texts = text_splitter.split_documents(documents)
-    from langchain_openai import OpenAIEmbeddings
     embeddings_model=OpenAIEmbeddings()
     embedding = embeddings_model
     vectordb = Chroma.from_documents(
