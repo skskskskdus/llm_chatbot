@@ -82,8 +82,8 @@ if "retriever" not in st.session_state:
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
-    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-    chroma_db = Chroma.from_documents(documents=splits, embedding=embeddings)
+    embedding = OpenAIEmbeddings()
+    vectordb = Chroma.from_documents(documents=splits embedding=embedding)
     print("Retriever Done.")
     st.session_state.retriever = chroma_db.as_retriever()
 # 프롬프트 템플릿 정의
