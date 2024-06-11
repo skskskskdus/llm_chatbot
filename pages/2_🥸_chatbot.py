@@ -11,7 +11,7 @@ from langchain.chains import ConversationChain
 from langchain.llms import OpenAI
 from langchain.docstore.document import Document
 from streamlit_extras.let_it_rain import rain
-from langchain.output_parsers import StrOutputParser
+from langchain.output_parsers import PydanticOutputParser
 from dotenv import load_dotenv
 from glob import glob
 
