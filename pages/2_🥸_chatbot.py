@@ -80,12 +80,16 @@ if "retriever" not in st.session_state:
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
-    # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
-    vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
-    print("Retriever Done.")
-    st.session_state.retriever = vectordb.as_rxetriever()
 
+    # 문서를 임베딩하여 벡터 데이터베이스 생성
+    vector_db = embedding.encode_documents(documents)
+
+    # 벡터 데이터베이스를 RetrievalQA로 변환
+    retriever = RetrievalQA(vector_db)
+
+    # session_state에 retriever 저장
+    st.session_state.retriever = retriever
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
         """
