@@ -35,7 +35,7 @@ st.sidebar.video("https://youtu.be/FoO7Pmx0bE4")
 
 # 기본 모델 설정
 if "model" not in st.session_state:
-    st.session_state["model"] = "gpt-3.5-turbo"
+    st.session_state["model"] = "gpt-4o"
 
 # 채팅 기록 초기화
 if "chat_history" not in st.session_state:
