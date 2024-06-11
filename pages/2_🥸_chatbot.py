@@ -18,6 +18,7 @@ from langchain_openai import OpenAIEmbeddings
 
 from langchain_core.output_parsers import StrOutputParser
 
+import chromadb
 import time
 from glob import glob
 
