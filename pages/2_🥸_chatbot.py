@@ -17,6 +17,7 @@ from langchain_openai import OpenAIEmbeddings
 
 
 from langchain_core.output_parsers import StrOutputParser
+from langchain_text_splitters import CharacterTextSplitter
 
 import time
 from glob import glob
@@ -76,7 +77,7 @@ if "retriever" not in st.session_state:
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
 
     # 텍스트 분할
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=200)
+    text_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=200)
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
