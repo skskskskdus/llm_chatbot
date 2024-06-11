@@ -77,7 +77,7 @@ if "retriever" not in st.session_state:
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
     
     # 텍스트 분할
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
@@ -104,7 +104,7 @@ prompt = ChatPromptTemplate.from_template(
 def format_docs(docs):
     return '\n\n'.join(doc.page_content for doc in docs)
 
-llm = OpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
+llm = OpenAI(api_key=OPENAI_API_KEY, model="gpt-4o", temperature=0)
 
 # RAG Chain 연결
 rag_chain = (
