@@ -47,42 +47,17 @@ extract_dir = os.path.join("data", "data")
 json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
 
 if "retriever" not in st.session_state:
-    # 파일 압축 해제
-    try:
-        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_dir)
-    except PermissionError:
-        st.error("권한이 없습니다. 파일 경로와 권한을 확인하세요.")
-    except FileNotFoundError:
-        st.error("ZIP 파일을 찾을 수 없습니다. 파일 경로를 확인하세요.")
 
-    # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join(extract_dir, '*.json'))
-
-    # 모든 JSON 데이터를 저장할 리스트
-    career_data = []
-
-    # 각 JSON 파일 로드 및 데이터 추가
-    for json_file in json_files:
-        try:
-            with open(json_file, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                career_data.extend(data)  # 데이터를 리스트에 추가
-        except FileNotFoundError:
-            st.error(f"{json_file}에 JSON 파일을 찾을 수 없습니다.")
-        except json.JSONDecodeError:
-            st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
-
-    # JSON 데이터를 Document 객체로 변환
-    documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
-     # 텍스트 분할
+    loader=DirectoryLoader("data",glob="*.json",loader_cls=TextLoader)
+    documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_documents(documents)
-    print("Chunks split Done.")
-    
-    embedding = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
-    print("Retriever Done.")
+    texts = text_splitter.split_documents(documents)
+    from langchain_openai import OpenAIEmbeddings
+    embeddings_model=OpenAIEmbeddings()
+    embedding = embeddings_model
+    vectordb = Chroma.from_documents(
+        documents=texts,
+        embedding=embedding)
     st.session_state.retriever = vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
