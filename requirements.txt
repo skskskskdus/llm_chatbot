@@ -32,6 +32,7 @@ duckdb==1.0.0
 email_validator==2.1.1
 emoji==2.12.1
 entrypoints==0.4
+faiss-cpu==1.8.0
 Faker==25.8.0
 fastapi==0.111.0
 fastapi-cli==0.0.4
