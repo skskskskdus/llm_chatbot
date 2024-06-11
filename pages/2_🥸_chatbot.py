@@ -17,15 +17,13 @@ from glob import glob
 
 import time
 
+# OpenAI API 키 설정
 # API 키 정보 로드
 load_dotenv()
 
 # OpenAI API 키 설정
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    st.error("OPENAI_API_KEY is missing! Please check your environment variables.")
-else:
-    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+OPENAI_API_KEY = "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" # 실제 API 키를 설정하세요
+os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
 # 페이지 설정
 st.set_page_config(page_title="chatbot", page_icon="🥸")
