@@ -98,7 +98,7 @@ if "retriever" not in st.session_state:
     combined_embeddings = np.concatenate(embeddings, axis=0)
 
     # 벡터 데이터베이스로 변환
-    vector_db = RetrievalQA(combined_embeddings)
+    vector_db = RetrievalQA(embedding)
 
     # session_state에 retriever 저장
     st.session_state.retriever = vectordb
