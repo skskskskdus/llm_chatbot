@@ -8,6 +8,7 @@ from langchain_community.vectorstores import Chroma
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
+from langchain_community.document_loaders import DirectoryLoader
 from langchain.docstore.document import Document
 from streamlit_extras.let_it_rain import rain
 from langchain_core.callbacks.base import BaseCallbackHandler
