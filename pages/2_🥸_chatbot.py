@@ -80,28 +80,10 @@ if "retriever" not in st.session_state:
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
-    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
-
-    # 문서의 개별 임베딩을 저장할 리스트
-    embeddings = []
-
-    # 각 문서를 순회하며 임베딩 생성
-    for doc in documents:
-    # 문서의 텍스트를 추출하여 OpenAI에 전달
-        text = doc.page_content
-        # OpenAI API를 사용하여 텍스트를 임베딩
-        embedding = embedding.encode(text)
-        # 임베딩을 리스트에 추가
-        embeddings.append(embedding)
-
-    # 임베딩된 벡터들을 하나의 벡터로 결합
-    combined_embeddings = np.concatenate(embeddings, axis=0)
-
-    # 벡터 데이터베이스로 변환
-    vector_db = RetrievalQA(embedding)
-
-    # session_state에 retriever 저장
-    st.session_state.retriever = vectordb
+    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo)
+    vectordb = chromadb.from_documents(documents=splits,embedding=embedding)
+    print("Retriever Done.")
+    st.session_state.retriever = vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
