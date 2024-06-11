@@ -85,8 +85,8 @@ if "retriever" not in st.session_state:
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
-    # 임베딩 및 벡터 데이터베이스 생성, 검색
-    embedding = OpenAIEmbeddings()
+       # 임베딩 및 벡터 데이터베이스 생성, 검색
+    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
     vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
