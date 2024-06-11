@@ -47,17 +47,9 @@ extract_dir = os.path.join("data", "data")
 json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
 
 if "retriever" not in st.session_state:
-    # 파일 압축 해제
-    try:
-        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_dir)
-    except PermissionError:
-        st.error("권한이 없습니다. 파일 경로와 권한을 확인하세요.")
-    except FileNotFoundError:
-        st.error("ZIP 파일을 찾을 수 없습니다. 파일 경로를 확인하세요.")
 
     # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join(extract_dir, '*.json'))
+    json_files = glob(os.path.join(data, '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
