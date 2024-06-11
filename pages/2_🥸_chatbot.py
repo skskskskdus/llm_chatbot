@@ -22,7 +22,7 @@ import time
 load_dotenv()
 
 # OpenAI API 키 설정
-OPENAI_API_KEY =  "OPENAI_API_KEY"
+OPENAI_API_KEY =  "sk-proj-KZuObpMwFK7aPYvJxiGLT3BlbkFJs7gk6xZMPPKO6J04OIuD"
  # 실제 API 키를 설정하세요
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
