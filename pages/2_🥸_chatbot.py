@@ -89,8 +89,7 @@ if "retriever" not in st.session_state:
     embedding = OpenAIEmbeddings()
     new_client = chromadb.EphemeralClient()
     openai_lc_client= Chroma.from_documents(
-    documents=splits, embeddings, client=new_client, collection_name="openai_collection"
-)
+    documents=splits, embeddings, client=new_client, collection_name="openai_collection")
     vectordb = Chroma.from_documents(documents=splits,embedding=embedding,collection_name="openai_collection")
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
