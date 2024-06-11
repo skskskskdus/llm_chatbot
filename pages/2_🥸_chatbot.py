@@ -81,12 +81,12 @@ if "retriever" not in st.session_state:
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
 
     # 텍스트 분할
-    text_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=200)
+    text_splitter = CharacterTextSplitter(chunk_size=400, chunk_overlap=100)
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
-    embedding = OpenAIEmbeddings(model="gpt-3.5-turbo")
+    embedding = OpenAIEmbeddings()
     new_client = chromadb.EphemeralClient()
     vectordb = Chroma.from_documents(documents=splits,embedding=embedding,collection_name="openai_collection")
     print("Retriever Done.")
