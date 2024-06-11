@@ -101,7 +101,7 @@ if "retriever" not in st.session_state:
     vector_db = RetrievalQA(combined_embeddings)
 
     # session_state에 retriever 저장
-    st.session_state.retriever = vectordb.as_retriever()
+    st.session_state.retriever = vectordb
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
