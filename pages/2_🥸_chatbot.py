@@ -103,7 +103,7 @@ llm = OpenAI(api_key=OPENAI_API_KEY, model="gpt-4o", temperature=0)
 # RAG Chain 연결
 #세션 상태에서 검색기(retriever)를 가져오고, format_docs는 문서를 형식화합니다. RunnablePassthrough()는 질문을 전달
 rag_chain = (
-    {'context': st.session_state.retriever | format_docs, 'question': RunnablePassthrough()}
+    {'context': st.session_state.retriever | format_docs}
     | prompt #언어 모델(LLM)에 입력으로 사용될 수 있는 형식으로 데이터를 준
     | llm #응답 생성 
     | PydanticOutputParser()
