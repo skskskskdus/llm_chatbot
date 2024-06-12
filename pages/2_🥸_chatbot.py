@@ -63,7 +63,7 @@ if "chat_history" not in st.session_state:
 if "retriever" not in st.session_state:
 
     # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join(extract_dir, '*.json'))
+    json_files = glob(os.path.join('llm_chatbot', '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
