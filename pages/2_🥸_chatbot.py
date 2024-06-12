@@ -80,7 +80,7 @@ if "retriever" not in st.session_state:
     st.vectordb = Chroma(embedding_function=embedding) if len(documents) == 0 else Chroma.from_documents(documents=splits, embedding=embedding)
     print("Retriever Done.")
     st.session_state.retriever = st.vectordb.as_retriever()
-
+    #애플리케이션에서 세션 상태를 활용하여 벡터 데이터베이스에서 검색 기능을 설정
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
     """
