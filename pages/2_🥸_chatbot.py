@@ -79,7 +79,7 @@ if "retriever" not in st.session_state:
     embedding = OpenAIEmbeddings()
     st.vectordb = Chroma(embedding_function=embedding) if len(documents) == 0 else Chroma.from_documents(documents=splits, embedding=embedding)
     print("Retriever Done.")
-    st.session_state.retriever = vectordb.as_retriever()
+    st.session_state.retriever = st.vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
