@@ -58,7 +58,7 @@ if "chat_history" not in st.session_state:
 
 # ZIP 파일 해제 및 JSON 데이터 읽기
 #extract_dir = os.path.join("data", "data")
-json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열_ing.json")
+#json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열_ing.json")
 
 if "retriever" not in st.session_state:
 
