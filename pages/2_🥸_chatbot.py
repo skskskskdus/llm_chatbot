@@ -62,14 +62,21 @@ if "chat_history" not in st.session_state:
 
 if "retriever" not in st.session_state:
 
-    # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
+   # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
     json_files = glob(os.path.join('llm_chatbot', '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
 
+    # JSON 파일에서 데이터를 읽어와 career_data 리스트에 추가
+    for file in json_files:
+        with open(file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            career_data.append(data)
+
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
+
     # 텍스트 분할
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
     splits = text_splitter.split_documents(documents)
@@ -77,8 +84,7 @@ if "retriever" not in st.session_state:
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
-    #st.vectordb = Chroma(embedding_function=embedding) if len(documents) == 0 else Chroma.from_documents(documents=splits, embedding=embedding)
+    vectordb = Chroma.from_documents(documents=splits, embedding=embedding)
     print("Retriever Done.")
     st.session_state.retriever = vectordb.as_retriever()
     #애플리케이션에서 세션 상태를 활용하여 벡터 데이터베이스에서 검색 기능을 설정
