@@ -48,14 +48,14 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # ZIP 파일 해제 및 JSON 데이터 읽기
-zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
-extract_dir = os.path.join("data", "data")
-json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열.json")
+#zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
+#extract_dir = os.path.join("data", "data")
+json_file_path = os.path.join("전문가_라벨링_데이터_기술계열_ing.json")
 
 if "retriever" not in st.session_state:
 
     # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join('data', '*.json'))
+    json_files = glob(os.path.join('llm_chatbot', '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
