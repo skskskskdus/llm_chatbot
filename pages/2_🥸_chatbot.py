@@ -48,33 +48,38 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
 # ZIP 파일 해제 및 JSON 데이터 읽기
-#zip_file_path = os.path.join("ai_data", "TL_02. 추천직업 카테고리_01. 기술계열.zip")
+extract_dir = os.path.join("data", "data")
+json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열_ing.json"))
+#json_file_path = os.path.join("전문가_라벨링_데이터_기술계열_ing.json")
+
+# 채팅 기록 초기화
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+# ZIP 파일 해제 및 JSON 데이터 읽기
 #extract_dir = os.path.join("data", "data")
-json_file_path = os.path.join("전문가_라벨링_데이터_기술계열_ing.json")
+json_file_path = os.path.join(extract_dir, "전문가_라벨링_데이터_기술계열_ing.json")
 
 if "retriever" not in st.session_state:
 
     # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
-    json_files = glob(os.path.join('llm_chatbot', '*.json'))
+    json_files = glob(os.path.join(extract_dir, '*.json'))
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
+
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
-    
-    # 텍스트 분할:RecursiveCharacterTextSplitter을 이용해서  chunk의 크기를 500으로 지정,인접한 중복 문자 수 20으로 설정
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-    splits = text_splitter.split_documents(documents) #documents의 분할된 데이터가 splits에 저장됨
+    # 텍스트 분할
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings()
-    #벡터 베이스 FAISS 사용:대랑의 데이터일 경우 성능이 좋음
-    st.vectordb = Chroma(embedding_function=embedding) if len(documents) == 0 else Chroma.from_documents(documents=documents, embedding=embedding)
-
+    vectordb = Chroma.from_documents(documents=splits,embedding=embedding)
     print("Retriever Done.")
-   #데이터 베이스를 검색할 수 있는 객체 생성
-    st.session_state.retriever = st.vectordb.as_retriever()
+    st.session_state.retriever = vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
