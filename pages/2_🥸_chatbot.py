@@ -64,17 +64,6 @@ if "retriever" not in st.session_state:
 
     json_file_path = os.path.join('./', "전문가_라벨링_데이터_기술계열_ing.json")
 
-    # JSON 파일 읽기
-    try:
-        with open(json_file_path, 'r', encoding='utf-8') as file:
-            career_data = json.load(file)
-    except FileNotFoundError:
-        st.error(f"{json_file_path}에 JSON 파일을 찾을 수 없습니다. 압축 해제 과정을 확인하세요.")
-    except json.JSONDecodeError:
-        st.error(f"{json_file_path}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
-
-
-
    # 디렉토리 내의 모든 JSON 파일 경로를 리스트로 가져오기
     json_files = glob(os.path.join('.', '*.json'))
 
