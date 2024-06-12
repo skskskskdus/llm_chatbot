@@ -10,3 +10,4 @@ pymupdf
 streamlit
 pysqlite3-binary
 streamlit-extras
+streamlit_lottie
