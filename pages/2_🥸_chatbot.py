@@ -59,18 +59,6 @@ if "retriever" not in st.session_state:
 
     # 모든 JSON 데이터를 저장할 리스트
     career_data = []
-
-    # 각 JSON 파일 로드 및 데이터 추가
-    for json_file in json_files:
-        try:
-            with open(json_file, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                career_data.extend(data)  # 데이터를 리스트에 추가
-        except FileNotFoundError:
-            st.error(f"{json_file}에 JSON 파일을 찾을 수 없습니다.")
-        except json.JSONDecodeError:
-            st.error(f"{json_file}의 JSON 파일을 디코딩하는 중 오류가 발생했습니다.")
-
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
     
