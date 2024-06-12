@@ -106,7 +106,6 @@ rag_chain = (
     {'context':  st.session_state.retriever | format_docs}
     | prompt
     | llm
-    | StrOutputParser()
 )
 # 세션 상태 초기화
 if 'conversation' not in st.session_state:
