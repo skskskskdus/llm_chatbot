@@ -68,15 +68,17 @@ if "retriever" not in st.session_state:
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
     
-    # 텍스트 분할
+    # 텍스트 분할:RecursiveCharacterTextSplitter을 이용해서  chunk의 크기를 500으로 지정,인접한 중복 문자 수 20으로 설정
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=20)
-    splits = text_splitter.split_documents(documents)
+    splits = text_splitter.split_documents(documents) #documents의 분할된 데이터가 splits에 저장됨
     print("Chunks split Done.")
     
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+    #벡터 베이스 FAISS 사용:대랑의 데이터일 경우 성능이 좋음
     vectordb = FAISS.from_documents(documents, embedding)
     print("Retriever Done.")
+   #데이터 베이스를 검색할 수 있는 객체 생성
     st.session_state.retriever = vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
@@ -92,10 +94,10 @@ prompt = ChatPromptTemplate.from_template(
     Question: {question}
     """
 )
-
+# 검색한 문서 결과를 하나의 문단으로 합쳐줍니다.
 def format_docs(docs):
     return '\n\n'.join(doc.page_content for doc in docs)
-
+#llm 모델 생성
 llm = OpenAI(api_key=OPENAI_API_KEY, model="gpt-4o", temperature=0)
 
 # RAG Chain 연결
