@@ -102,7 +102,7 @@ llm = OpenAI(api_key=OPENAI_API_KEY, model="gpt-4o", temperature=0)
 
 # RAG Chain 연결
 #세션 상태에서 검색기(retriever)를 가져오고, format_docs는 문서를 형식화합니다. RunnablePassthrough()는 질문을 전달
-ag_chain = (
+rag_chain = (
     {'context':  st.session_state.retriever | format_docs, 'question': RunnablePassthrough()}
     | prompt
     | llm
