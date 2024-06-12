@@ -76,10 +76,11 @@ if "retriever" not in st.session_state:
     # 임베딩 및 벡터 데이터베이스 생성, 검색
     embedding = OpenAIEmbeddings()
     #벡터 베이스 FAISS 사용:대랑의 데이터일 경우 성능이 좋음
-    vectordb = Chroma.from_documents(documents=splites, embedding=embedding)
+    st.vectordb = Chroma(embedding_function=embedding) if len(documents) == 0 else Chroma.from_documents(documents=documents, embedding=embedding)
+
     print("Retriever Done.")
    #데이터 베이스를 검색할 수 있는 객체 생성
-    st.session_state.retriever = vectordb.as_retriever()
+    st.session_state.retriever = st.vectordb.as_retriever()
 
 # 프롬프트 템플릿 정의
 prompt = ChatPromptTemplate.from_template(
