@@ -70,7 +70,7 @@ if "retriever" not in st.session_state:
     # JSON 데이터를 Document 객체로 변환
     documents = [Document(page_content=json.dumps(item, ensure_ascii=False)) for item in career_data]
     # 텍스트 분할
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
     splits = text_splitter.split_documents(documents)
     print("Chunks split Done.")
     
