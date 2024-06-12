@@ -1,4 +1,4 @@
-from pysqlite3._sqlite3 import
+import pysqlite3._sqlite3
  
 import streamlit as st
 import zipfile
