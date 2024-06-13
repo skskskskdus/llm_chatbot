@@ -72,7 +72,7 @@ if "retriever" not in st.session_state:
 
     # JSON 파일에서 데이터를 읽어와 career_data 리스트에 추가
     for file in json_files:
-        with open(file, 'r', encoding='utf-8') as f:
+        with open(file, 'r') as f:
             data = json.load(f)
             career_data.append(data)
 
